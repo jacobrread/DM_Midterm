@@ -1,0 +1,109 @@
+
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+np.random.seed(0)
+
+class Environment:
+
+    def __init__(self, probs):
+        self.probs = probs  # success probabilities for each arm
+
+    def step(self, action):
+        # Pull arm and get stochastic reward (1 for success, 0 for failure)
+        return self.probs[action]
+
+class Agent:
+
+    def __init__(self, nActions, eps):
+        self.nActions = nActions
+        self.eps = eps
+        self.n = np.zeros(nActions) # action counts n(a)
+        self.Q = np.zeros(nActions) # value Q(a)
+
+    def update_Q(self, action, reward):
+        # Update Q action-value given (action, reward)
+        self.n[action] += 1
+        self.Q[action] += (1.0/self.n[action]) * (reward - self.Q[action])
+
+    def get_action(self):
+        # Epsilon-greedy policy
+        if np.random.random() < self.eps: # explore
+            return np.random.randint(self.nActions)
+        else: # exploit
+            return np.random.choice(np.flatnonzero(self.Q == self.Q.max()))
+
+
+def get_probabilities():
+    probs = [
+        np.random.beta(7, 3) + 2,
+        np.random.uniform(0, 4),
+        np.random.beta(3, 7) + 2,
+        np.random.normal(2, 1.4),
+        np.random.normal(1.3, 7),
+    ]
+
+    return probs
+
+
+# Start multi-armed bandit simulation
+def experiment(probs, N_episodes):
+    env = Environment(probs) # initialize arm probabilities
+    agent = Agent(len(env.probs), eps)  # initialize agent
+    actions, rewards = [], []
+    for episode in range(N_episodes):
+        action = agent.get_action() # sample policy
+        reward = env.step(action) # take step + get reward
+        agent.update_Q(action, reward) # update Q
+        actions.append(action)
+        rewards.append(reward)
+    return np.array(actions), np.array(rewards)
+
+N_steps = 500 # number of steps (episodes)
+eps = 0.1 # probability of random exploration (fraction)
+save_fig = True # save file in same directory
+output_dir = os.path.join(os.getcwd(), "output")
+
+
+R = np.zeros((N_steps,))  # reward history sum
+A = np.zeros((N_steps, 21))  # action history sum
+
+for i in range(N_steps):
+    probs = get_probabilities()
+    actions, rewards = experiment(probs, N_steps)  # perform experiment
+    R += rewards
+    for j, a in enumerate(actions):
+        A[j][a] += 1
+
+# Plot reward results
+R_avg =  R / float(N_steps)
+plt.plot(R_avg, ".")
+plt.xlabel("Step")
+plt.ylabel("Average Reward")
+plt.grid()
+ax = plt.gca()
+plt.xlim([1, N_steps])
+if save_fig:
+    if not os.path.exists(output_dir): os.mkdir(output_dir)
+    plt.savefig(os.path.join(output_dir, "rewards.png"), bbox_inches="tight")
+else:
+    plt.show()
+plt.close()
+
+# Plot action results
+for i in range(len(probs)):
+    steps = list(np.array(range(len(actions)))+1)
+    plt.plot(steps, actions, ".",
+             linewidth=5,
+             label="Arm {}".format(i+1))
+plt.xlabel("Step")
+plt.ylabel("Selection over Time")
+# leg = plt.legend(loc='upper left', shadow=True)
+plt.xlim([1, N_steps])
+plt.ylim([-2, 6])
+if save_fig:
+    if not os.path.exists(output_dir): os.mkdir(output_dir)
+    plt.savefig(os.path.join(output_dir, "actions.png"), bbox_inches="tight")
+else:
+    plt.show()
+plt.close()
