@@ -1,16 +1,15 @@
 # Midterm
 
 ## Problem 1
-Start by solving the vanilla problem and then add the complexity (50%, etc) as you go
 
-### For just 50%:
+### For just 50% chance of accepting the job:
 I ran 10000 experiments and got 31% stopping point and 27% stopping point
 I ran 100000 experiments and got 34% stopping point
 
  How does this compare with the simple early-stopping problem?
  - The curve flattens out more
 
-### For 20% and increasing
+### For 20% and increasing chance of not accepting the job
 I ran 10000 experiments and got the following:
 - Optimal Search Threshold: 30.0%
 - Optimal Answer: 859
@@ -32,10 +31,19 @@ Optimal Answer: 560.6912085494506
 
 
 ## Problem 2
-The one that has the highest average is the one you should converge too
 
+### Without Baseline Sensor
 How many days will it take for you to make the decision to place the permanent sensor?
+
+
 Also, state the area that you select as the optimum.
+- Area1 was the selected optimum area.
+
+### With Baseline Sensor
+Does this change the final decision of placement?
+- No it does not.
+
+How long does it take before you choose to place the sensor?
 
 
 
@@ -44,6 +52,21 @@ Don't forget the price of the option is the current stock price - the time to ex
 
 
 
-## General Tips
-Dr. Mario said that if you cannot figure something out, experiment yourself and add a different complexity. Solve it,
-and explain it in either the readme or the code comments
+## Problem 4
+As this is the first time I have taught this topic, I could really use help in
+understanding how to improve the course. What is making sense, and what doesn’t?
+How can I do this better? 
+
+I think this course has a lot of potential. Where it is lacking, in my opinion, is in the early stages 
+of learning a new topic. I never felt confident, and honestly still don't, with the monte carlo or epsilon
+greedy algorithms. Maybe I am slow to pick up on this, but I felt like we went over it and coded it up once
+(which by the way was helpful) and then just assumed it was understood after that. If you payed me to go and 
+code up a simple implementation of these algorithms without existing code or google I wouldn't be able to do
+it. 
+
+On a different note, a document containing all the various financial terms mentioned would be extremely helpful.
+I realize that we can google terms and while that is true I find it very helpful to get the specific teacher's 
+definition of a term since they are the ones using it frequently. I would LOVE to understand all of the financial
+topics we have talked about better, and I wish I had heard of them before this class, but the reality is that I 
+had never heard of most of them. In short, a document that we could refer to for help with would be greatly
+appreciated.
