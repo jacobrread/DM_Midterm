@@ -60,18 +60,32 @@ def get_probabilities(withArea0):
     return probs
 
 
-def get_area(num):
-    if num == 0:
-        return "area1"
-    elif num == 1:
-        return "area2"
-    elif num == 2:
-        return "area3"
-    elif num == 3:
-        return "area4"
-    elif num == 4:
-        return "area5"
-    
+def get_area(num, withArea0):
+    if withArea0:
+        if num == 0:
+            return "area0"
+        elif num == 1:
+            return "area1"
+        elif num == 2:
+            return "area2"
+        elif num == 3:
+            return "area3"
+        elif num == 4:
+            return "area4"
+        elif num == 5:
+            return "area5"
+    else:
+        if num == 0:
+            return "area1"
+        elif num == 1:
+            return "area2"
+        elif num == 2:
+            return "area3"
+        elif num == 3:
+            return "area4"
+        elif num == 4:
+            return "area5"
+        
 
 # Start multi-armed bandit simulation
 def experiment(probs, N_episodes):
@@ -131,7 +145,7 @@ def run(withArea0, output_dir, R):
         for j, a in enumerate(actions):
             A[j][a] += 1
 
-    print("Chosen Area: {}".format(get_area(np.argmax(np.bincount(actions)))))
+    print("Chosen Area: {}".format(get_area(np.argmax(np.bincount(actions)), withArea0)))
     plot_reward(output_dir)
     plot_action(probs, actions, output_dir)
 
